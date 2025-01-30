@@ -1,0 +1,17 @@
+name: Daily Auto Commit
+on:
+  schedule:
+    - cron: '0 23 * * *'  # 北京时间每天7:00 UTC+8
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Auto commit
+      run: |
+        echo "\n## $(date -d '+8 hours' '+%Y-%m-%d')" >> logs/$(date -d '+8 hours' '+%Y-%m').md
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add .
+        git commit -m "Auto: Daily log $(date -d '+8 hours' '+%Y-%m-%d')"
+        git push
